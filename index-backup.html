@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Comfort Space</title>
+<meta name="description" content="A little space for my thoughts, stories, and inspirations.">
+
+<style>
+  /* ============ COLOURS (change these to restyle the whole site) ============ */
+  :root {
+    --blush:       #f9dde2;
+    --blush-deep:  #f0bfca;
+    --cream:       #fff5ec;
+    --ivory:       #fffdf8;
+    --rosegold:    #b76e79;
+    --rosegold-lt: #d9a79c;
+    --gold-grad:   linear-gradient(135deg, #c98a8f 0%, #e3b7a6 50%, #b76e79 100%);
+    --text:        #5a4549;
+    --text-soft:   #8c7478;
+    --shadow:      0 12px 34px rgba(183, 110, 121, 0.14);
+    --shadow-sm:   0 6px 18px rgba(183, 110, 121, 0.12);
+    --radius:      28px;
+
+    /* Fonts: elegant ones already built into phones, tablets and computers (no downloads needed) */
+    --font-head:   'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, 'Times New Roman', serif;
+    --font-body:   system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --font-script: 'Segoe Script', 'Snell Roundhand', 'Apple Chancery', 'Brush Script MT', 'Lucida Handwriting', cursive;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 76px; -webkit-text-size-adjust: 100%; }
+
+  body {
+    font-family: var(--font-body);
+    font-size: 17px; line-height: 1.8;
+    color: var(--text); background: var(--ivory);
+    overflow-x: hidden;
+  }
+  h1, h2, h3 { font-family: var(--font-head); font-weight: 600; line-height: 1.25; }
+  .script { font-family: var(--font-script); font-weight: 400; }
+  img { max-width: 100%; display: block; }
+  a { color: var(--rosegold); }
+
+  .container { width: min(1080px, 92%); margin: 0 auto; }
+  section { padding: 96px 0; position: relative; }
+
+  /* ---------- Flowers (drawn once, reused everywhere) ---------- */
+  .fl { width: 1em; height: 1em; display: inline-block; vertical-align: middle; }
+  .deco { position: absolute; pointer-events: none; z-index: 1; }
+
+  /* ---------- Section titles ---------- */
+  .section-title { text-align: center; margin-bottom: 52px; }
+  .section-title .script { color: var(--rosegold); font-size: 1.45rem; display: block; margin-bottom: 4px; }
+  .section-title h2 {
+    font-size: clamp(2rem, 5.5vw, 2.8rem);
+    background: var(--gold-grad); -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: var(--rosegold);
+  }
+  .divider { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 12px; color: var(--blush-deep); font-size: 1.6rem; }
+  .divider::before, .divider::after { content: ""; width: 60px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, transparent, var(--rosegold-lt)); }
+  .divider::after { transform: scaleX(-1); }
+
+  /* ---------- Buttons ---------- */
+  .btn {
+    display: inline-block; border: none; cursor: pointer;
+    padding: 14px 34px; border-radius: 50px;
+    font-family: var(--font-body); font-size: 1rem; font-weight: 700; letter-spacing: .02em;
+    text-decoration: none; transition: transform .25s, box-shadow .25s, background .25s;
+  }
+  .btn-primary { background: var(--gold-grad); color: #fff; box-shadow: var(--shadow); }
+  .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 16px 36px rgba(183,110,121,.28); }
+  .btn-soft { background: var(--ivory); color: var(--rosegold); border: 2px solid var(--rosegold-lt); }
+  .btn-soft:hover { transform: translateY(-3px); background: var(--blush); }
+
+  /* ============ NAVIGATION ============ */
+  header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(255, 253, 248, 0.9);
+    -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--blush);
+  }
+  .nav { display: flex; justify-content: space-between; align-items: center; height: 68px; }
+  .logo { font-size: 1.55rem; color: var(--rosegold); text-decoration: none; white-space: nowrap; }
+  .logo .fl { color: var(--blush-deep); margin-right: 4px; }
+  .nav ul { display: flex; gap: 4px; list-style: none; }
+  .nav ul a {
+    text-decoration: none; color: var(--text); font-weight: 600; font-size: .94rem;
+    padding: 8px 15px; border-radius: 30px; transition: background .2s, color .2s;
+  }
+  .nav ul a:hover { background: var(--blush); color: var(--rosegold); }
+  .menu-btn {
+    display: none; background: var(--blush); border: none; cursor: pointer;
+    width: 46px; height: 46px; border-radius: 50%; font-size: 1.4rem; color: var(--rosegold);
+  }
+  @media (max-width: 860px) {
+    .menu-btn { display: block; }
+    .nav ul {
+      position: absolute; top: 68px; left: 4%; right: 4%;
+      flex-direction: column; gap: 0; padding: 12px;
+      background: var(--ivory); border-radius: var(--radius); box-shadow: var(--shadow);
+      border: 1px solid var(--blush); display: none;
+    }
+    .nav ul.open { display: flex; }
+    .nav ul a { display: block; padding: 14px 18px; }
+  }
+
+  /* ============ HOME ============ */
+  #home {
+    min-height: 100vh; min-height: 100svh;
+    display: flex; align-items: center; text-align: center; overflow: hidden;
+    padding: 120px 0 80px;
+    background:
+      radial-gradient(circle at 12% 18%, var(--blush) 0, transparent 46%),
+      radial-gradient(circle at 88% 82%, var(--cream) 0, transparent 52%),
+      radial-gradient(circle at 80% 15%, #fbe6e2 0, transparent 35%),
+      var(--ivory);
+  }
+  #home .d1 { top: 11%; left: 5%;  font-size: clamp(60px, 11vw, 130px); color: var(--blush-deep); opacity: .55; animation: sway 9s ease-in-out infinite; }
+  #home .d2 { top: 62%; left: 9%;  font-size: clamp(30px, 6vw, 70px);  color: var(--rosegold-lt); opacity: .4; animation: sway 7s ease-in-out infinite reverse; }
+  #home .d3 { top: 14%; right: 6%; font-size: clamp(34px, 7vw, 84px);  color: var(--rosegold-lt); opacity: .4; animation: sway 8s ease-in-out infinite; }
+  #home .d4 { bottom: 9%; right: 5%; font-size: clamp(64px, 12vw, 150px); color: var(--blush-deep); opacity: .5; animation: sway 10s ease-in-out infinite reverse; }
+  @keyframes sway { 0%,100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-16px) rotate(12deg); } }
+
+  .hero { position: relative; z-index: 2; }
+  .avatar {
+    width: 156px; height: 156px; margin: 0 auto 26px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--blush), var(--cream));
+    border: 6px solid var(--ivory);
+    box-shadow: 0 0 0 3px var(--rosegold-lt), var(--shadow);
+    display: grid; place-items: center; font-size: 4rem; overflow: hidden;
+  }
+  .avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .hero .hello { font-size: clamp(1.4rem, 4vw, 1.9rem); color: var(--rosegold); }
+  .hero h1 {
+    font-size: clamp(2.6rem, 10vw, 4.8rem); margin: 6px 0 16px;
+    background: var(--gold-grad); -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: var(--rosegold);
+  }
+  .hero p.welcome { max-width: 560px; margin: 0 auto 34px; color: var(--text-soft); font-size: 1.15rem; font-style: italic; font-family: var(--font-head); }
+  .hero .buttons { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+  /* ============ ABOUT ============ */
+  #about { background: var(--cream); }
+  .about-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 54px; align-items: center; }
+  .about-photo {
+    aspect-ratio: 4 / 5; border-radius: 999px 999px var(--radius) var(--radius);
+    background: linear-gradient(160deg, var(--blush), var(--cream));
+    border: 6px solid var(--ivory); outline: 2px solid var(--rosegold-lt); outline-offset: 4px;
+    display: grid; place-items: center; font-size: 5rem; box-shadow: var(--shadow); overflow: hidden;
+  }
+  .about-photo img { width: 100%; height: 100%; object-fit: cover; }
+  .about-text { background: var(--ivory); border-radius: var(--radius); padding: 36px; box-shadow: var(--shadow-sm); }
+  .about-text h3 { font-size: 1.7rem; margin-bottom: 14px; color: var(--rosegold); }
+  .about-text p { margin-bottom: 16px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+  .chip { background: var(--blush); color: var(--text); padding: 8px 18px; border-radius: 40px; font-weight: 600; font-size: .92rem; }
+  .chip:nth-child(even) { background: var(--cream); border: 1px solid var(--rosegold-lt); }
+  @media (max-width: 780px) {
+    .about-grid { grid-template-columns: 1fr; gap: 36px; }
+    .about-photo { max-width: 280px; margin: 0 auto; }
+    .about-text { padding: 26px 22px; }
+  }
+
+  /* ============ STORIES ============ */
+  #stories { background: var(--ivory); }
+  .stories-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px; }
+  .story {
+    background: #fff; border-radius: var(--radius); padding: 32px 30px;
+    box-shadow: var(--shadow); border: 1px solid var(--blush);
+    position: relative; overflow: hidden; transition: transform .3s, box-shadow .3s;
+  }
+  .story::after {
+    content: ""; position: absolute; top: -34px; right: -34px; width: 100px; height: 100px;
+    border-radius: 50%; background: var(--blush); opacity: .7;
+  }
+  .story:hover { transform: translateY(-6px); box-shadow: 0 18px 40px rgba(183,110,121,.2); }
+  .story > * { position: relative; z-index: 1; }
+  .story .date { color: var(--rosegold); font-size: .82rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+  .story h3 { margin: 8px 0 12px; font-size: 1.35rem; }
+  .story p { color: var(--text-soft); margin-bottom: 12px; }
+  .story .more { display: none; }
+  .story.open .more { display: block; }
+  .story button { background: none; border: none; cursor: pointer; font: inherit; font-weight: 700; color: var(--rosegold); padding: 4px 0; }
+  .story button:hover { text-decoration: underline; }
+
+  /* ============ GALLERY ============ */
+  #gallery { background: var(--cream); }
+  .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+  .photo {
+    position: relative; aspect-ratio: 1 / 1; border-radius: var(--radius); overflow: hidden;
+    cursor: pointer; box-shadow: var(--shadow); border: 5px solid #fff; padding: 0;
+    display: grid; place-items: center; font-size: 3.4rem; transition: transform .3s, box-shadow .3s;
+  }
+  .photo:hover { transform: scale(1.03) rotate(-.6deg); box-shadow: 0 18px 40px rgba(183,110,121,.22); }
+  .photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .photo span.cap {
+    position: absolute; left: 0; right: 0; bottom: 0; padding: 28px 14px 12px;
+    background: linear-gradient(transparent, rgba(120, 70, 80, .62));
+    color: #fff; font-family: var(--font-body); font-size: .95rem; font-weight: 600; text-align: left;
+  }
+  .p1 { background: linear-gradient(135deg, #f9dde2, #fff1e6); }
+  .p2 { background: linear-gradient(135deg, #f5e3d6, #fffaf2); }
+  .p3 { background: linear-gradient(135deg, #f0bfca, #f9dde2); }
+  .p4 { background: linear-gradient(135deg, #f3dcd2, #f5e3d6); }
+  .p5 { background: linear-gradient(135deg, #fde4e8, #f2cfc3); }
+  .p6 { background: linear-gradient(135deg, #ecd3c6, #f9dde2); }
+
+  .lightbox {
+    position: fixed; inset: 0; z-index: 300; display: none;
+    background: rgba(90, 55, 65, .82); align-items: center; justify-content: center; padding: 20px;
+  }
+  .lightbox.show { display: flex; }
+  .lightbox-box { background: var(--ivory); border-radius: var(--radius); padding: 18px; max-width: 520px; width: 100%; text-align: center; box-shadow: var(--shadow); }
+  .lightbox-view { aspect-ratio: 1 / 1; border-radius: 20px; display: grid; place-items: center; font-size: 6rem; overflow: hidden; margin-bottom: 14px; background-size: cover; }
+  .lightbox-view img { width: 100%; height: 100%; object-fit: cover; }
+  .lightbox-box p { font-weight: 600; margin-bottom: 12px; font-family: var(--font-head); }
+
+  /* ============ QUOTES ============ */
+  #quotes { background: linear-gradient(160deg, var(--blush) 0%, var(--cream) 100%); overflow: hidden; }
+  #quotes .d1 { top: 6%; left: 3%; font-size: clamp(50px, 9vw, 110px); color: #fff; opacity: .55; }
+  #quotes .d2 { bottom: 5%; right: 3%; font-size: clamp(50px, 9vw, 110px); color: #fff; opacity: .55; }
+  #quotes .container { position: relative; z-index: 2; }
+  .quote-main {
+    background: rgba(255, 253, 248, .8); border-radius: var(--radius); border: 1px solid #fff;
+    padding: 46px 30px; text-align: center; max-width: 740px; margin: 0 auto 38px; box-shadow: var(--shadow);
+  }
+  .quote-main .mark { font-family: var(--font-head); font-size: 4.2rem; line-height: .6; color: var(--rosegold-lt); }
+  .quote-main blockquote { font-family: var(--font-head); font-style: italic; font-size: clamp(1.25rem, 4vw, 1.75rem); line-height: 1.6; margin: 12px 0 14px; transition: opacity .35s; }
+  .quote-main cite { color: var(--rosegold); font-weight: 700; font-style: normal; }
+  .quote-main .btn { margin-top: 24px; }
+  .quote-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
+  .quote-card { background: rgba(255,253,248,.7); border-radius: 22px; padding: 24px; font-family: var(--font-head); font-style: italic; text-align: center; box-shadow: var(--shadow-sm); }
+
+  /* ============ CONTACT ============ */
+  #contact { background: var(--ivory); }
+  .contact-box { max-width: 650px; margin: 0 auto; background: #fff; border: 1px solid var(--blush); border-radius: var(--radius); padding: 38px; box-shadow: var(--shadow); }
+  .contact-box p.intro { text-align: center; color: var(--text-soft); margin-bottom: 26px; }
+  label { display: block; font-weight: 700; margin: 14px 0 6px; font-size: .95rem; }
+  input, textarea {
+    width: 100%; padding: 14px 18px; border-radius: 18px; font: inherit; color: var(--text);
+    border: 2px solid var(--blush); background: var(--ivory); outline: none; transition: border-color .2s, box-shadow .2s;
+  }
+  input:focus, textarea:focus { border-color: var(--rosegold-lt); box-shadow: 0 0 0 4px rgba(240,191,202,.35); }
+  textarea { min-height: 140px; resize: vertical; }
+  .contact-box .btn { width: 100%; margin-top: 22px; }
+  .form-note { text-align: center; font-size: .9rem; color: var(--text-soft); margin-top: 14px; }
+  .social { text-align: center; margin-top: 26px; }
+  .social a { margin: 0 10px; font-weight: 700; text-decoration: none; }
+  .social a:hover { text-decoration: underline; }
+  @media (max-width: 520px) { .contact-box { padding: 26px 20px; } section { padding: 76px 0; } }
+
+  /* ============ FOOTER ============ */
+  footer { background: var(--blush); text-align: center; padding: 40px 0 34px; color: var(--text-soft); }
+  footer .script { font-size: 1.6rem; color: var(--rosegold); display: block; }
+  footer .flowers { color: var(--rosegold-lt); font-size: 1.4rem; letter-spacing: 6px; margin-bottom: 6px; }
+
+  /* Gentle fade-in when scrolling */
+  .reveal { opacity: 0; transform: translateY(26px); transition: opacity .9s, transform .9s; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+    html { scroll-behavior: auto; }
+    .reveal { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+
+<body>
+
+<!-- Flower drawing, defined once and reused everywhere on the page -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="flower" viewBox="0 0 100 100">
+      <g fill="currentColor">
+        <ellipse cx="50" cy="27" rx="14" ry="22"/>
+        <ellipse cx="50" cy="27" rx="14" ry="22" transform="rotate(72 50 50)"/>
+        <ellipse cx="50" cy="27" rx="14" ry="22" transform="rotate(144 50 50)"/>
+        <ellipse cx="50" cy="27" rx="14" ry="22" transform="rotate(216 50 50)"/>
+        <ellipse cx="50" cy="27" rx="14" ry="22" transform="rotate(288 50 50)"/>
+      </g>
+      <circle cx="50" cy="50" r="10" fill="#e8c4a0"/>
+      <circle cx="50" cy="50" r="4" fill="#c98a8f"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ================= NAVIGATION ================= -->
+<header>
+  <div class="container nav">
+    <a href="#home" class="logo script"><svg class="fl" viewBox="0 0 100 100"><use href="#flower"/></svg>My Comfort Space</a>
+    <button class="menu-btn" id="menuBtn" aria-label="Open menu">☰</button>
+    <ul id="menu">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#stories">Stories</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#quotes">Quotes</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</header>
+
+<main>
+
+<!-- ================= HOME ================= -->
+<section id="home">
+  <svg class="fl deco d1" viewBox="0 0 100 100"><use href="#flower"/></svg>
+  <svg class="fl deco d2" viewBox="0 0 100 100"><use href="#flower"/></svg>
+  <svg class="fl deco d3" viewBox="0 0 100 100"><use href="#flower"/></svg>
+  <svg class="fl deco d4" viewBox="0 0 100 100"><use href="#flower"/></svg>
+  <div class="container hero">
+    <div class="avatar">
+      🌸
+      <!-- TO USE YOUR OWN PHOTO: delete the 🌸 above and use this line instead:
+      <img src="me.jpg" alt="A photo of me"> -->
+    </div>
+    <p class="hello script">Welcome to</p>
+    <h1>My Comfort Space</h1>
+    <p class="welcome">A little space for my thoughts, stories, and inspirations.</p>
+    <div class="buttons">
+      <a href="#about" class="btn btn-primary">Get to know me</a>
+      <a href="#stories" class="btn btn-soft">Read my stories</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ABOUT ================= -->
+<section id="about">
+  <div class="container">
+    <div class="section-title reveal">
+      <span class="script">a little about</span>
+      <h2>About Me</h2>
+      <div class="divider"><svg class="fl" viewBox="0 0 100 100"><use href="#flower"/></svg></div>
+    </div>
+    <div class="about-grid reveal">
+      <div class="about-photo">
+        🌷
+        <!-- To use your photo, replace the 🌷 with: <img src="about.jpg" alt="Me"> -->
+      </div>
+      <div class="about-text">
+        <h3>Hi, I'm just a simply a simple person 👋</h3>
+        <p>I'm a curious, kind-hearted person who loves slow mornings, warm cups of tea or coffee, and little moments that make life beautiful. This is where I write about what I'm learning and feeling.</p>
+        <p>I am simply who overthinks a lot but yet still able to move forward, one step at a time.</p>
+        <div class="chips">
+          <span class="chip">☕ Tea / coffee lover</span>
+          <span class="chip">📖 Reading</span>
+          <span class="chip">🌿 Nature</span>
+          <span class="chip">📷 Photography</span>
+          <span class="chip">✍️ Writing</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MY STORIES ================= -->
+<section id="stories">
+  <div class="container">
+    <div class="section-title reveal">
+      <span class="script">thoughts &amp; memories</span>
+      <h2>My Stories</h2>
+      <div class="divider"><svg class="fl" viewBox="0 0 100 100"><use href="#flower"/></svg></div>
+    </div>
+    <div class="stories-grid">
+
+      <article class="story reveal">
+        <div class="date">November 2026</div>
+        <h3>Starting Something New</h3>
+        <p>Today I began building my very first website. I felt nervous, but also excited, because every beginning is a small act of courage.</p>
+        <p class="more">Replace this with your own words. You can write about a lesson you learned, a trip you took, or simply how your day felt. Your voice matters, and your story is worth sharing.</p>
+        <button type="button">Read more ↓</button>
+      </article>
+
+      <article class="story reveal">
+        <div class="date">Add a date</div>
+        <h3>A Memory I Treasure</h3>
+        <p>Think of a moment that made your heart feel full. Write a few lines about it here, who was there, what it smelled like, how it felt.</p>
+        <p class="more">Longer stories can go here. Just keep the text between the &lt;p class="more"&gt; tags and it will tuck away neatly until someone taps "Read more".</p>
+        <button type="button">Read more ↓</button>
+      </article>
+
+      <article class="story reveal">
+        <div class="date">Add a date</div>
+        <h3>Little Things That Make Me Happy</h3>
+        <p>Rainy afternoons, handwritten notes, the first sip of warm tea. What are the small joys in your life?</p>
+        <p class="more">Add your list here! To add more stories, copy one whole &lt;article&gt; block and paste it right after another one.</p>
+        <button type="button">Read more ↓</button>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= PHOTO GALLERY ================= -->
+<section id="gallery">
+  <div class="container">
+    <div class="section-title reveal">
+      <span class="script">moments I love</span>
+      <h2>Photo Gallery</h2>
+      <div class="divider"><svg class="fl" viewBox="0 0 100 100"><use href="#flower"/></svg></div>
+    </div>
+
+    <!--
+      HOW TO ADD YOUR OWN PHOTOS:
+      1. Upload your photo to GitHub (same place as index.html), e.g. flowers.jpg
+      2. Inside a button below, delete the emoji and add:
+         <img src="flowers.jpg" alt="Flowers">
+      3. Change the caption text.
+    -->
+    <div class="gallery-grid reveal">
+      <button class="photo p1" data-cap="Spring flowers">🌸<span class="cap">Spring flowers</span></button>
+      <button class="photo p2" data-cap="Morning tea">☕<span class="cap">Morning tea</span></button>
+      <button class="photo p3" data-cap="Sunset walk">🌅<span class="cap">Sunset walk</span></button>
+      <button class="photo p4" data-cap="Good books">📚<span class="cap">Good books</span></button>
+      <button class="photo p5" data-cap="Sweet treats">🧁<span class="cap">Sweet treats</span></button>
+      <button class="photo p6" data-cap="Garden days">🌿<span class="cap">Garden days</span></button>
+    </div>
+  </div>
+</section>
+
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-box">
+    <div class="lightbox-view" id="lbView"></div>
+    <p id="lbCaption"></p>
+    <button class="btn btn-primary" id="lbClose" type="button">Close</button>
+  </div>
+</div>
+
+<!-- ================= QUOTES ================= -->
+<section id="quotes">
+  <svg class="fl deco d1" viewBox="0 0 100 100"><use href="#flower"/></svg>
+  <svg class="fl deco d2" viewBox="0 0 100 100"><use href="#flower"/></svg>
+  <div class="container">
+    <div class="section-title reveal">
+      <span class="script">words to carry with you</span>
+      <h2>Inspirational Quotes</h2>
+      <div class="divider"><svg class="fl" viewBox="0 0 100 100"><use href="#flower"/></svg></div>
+    </div>
+
+    <div class="quote-main reveal">
+      <div class="mark">“</div>
+      <blockquote id="quoteText">Small steps still move you forward.</blockquote>
+      <cite id="quoteAuthor">— Words to remember</cite><br>
+      <button class="btn btn-primary" id="newQuote" type="button">✨ Another quote</button>
+    </div>
+
+    <div class="quote-list reveal">
+      <div class="quote-card">“Bloom at your own pace.”</div>
+      <div class="quote-card">“Kindness is a quiet kind of magic.”</div>
+      <div class="quote-card">“Today is a fresh page. Write something lovely.”</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section id="contact">
+  <div class="container">
+    <div class="section-title reveal">
+      <span class="script">let's connect</span>
+      <h2>Contact Me</h2>
+      <div class="divider"><svg class="fl" viewBox="0 0 100 100"><use href="#flower"/></svg></div>
+    </div>
+
+    <div class="contact-box reveal">
+      <p class="intro">I'd love to hear from you. Send me a little note and I'll reply as soon as I can. 💌</p>
+      <form id="contactForm">
+        <label for="name">Your name</label>
+        <input id="name" type="text" placeholder="Jane" required>
+        <label for="message">Your message</label>
+        <textarea id="message" placeholder="Write your message here…" required></textarea>
+        <button type="submit" class="btn btn-primary">Send message 💌</button>
+      </form>
+      <p class="form-note">This opens your email app with the message ready to send.</p>
+      <div class="social">
+        <a href="mailto:zlurun@gmail.com">✉️ Email</a>
+        <a href="#" target="_blank" rel="noopener">📷 Instagram</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="flowers">
+    <svg class="fl" viewBox="0 0 100 100"><use href="#flower"/></svg>
+    <svg class="fl" viewBox="0 0 100 100"><use href="#flower"/></svg>
+    <svg class="fl" viewBox="0 0 100 100"><use href="#flower"/></svg>
+  </div>
+  <span class="script">Thank you for visiting</span>
+  <p>© <span id="year"></span> My Comfort Space · Made with love</p>
+</footer>
+
+<script>
+  /* ====== SETTINGS YOU CAN CHANGE ====== */
+  var myEmail = "zlurun@gmail.com";   // <-- put YOUR email here
+
+  var quotes = [
+    { text: "Small steps still move you forward.",              author: "Words to remember" },
+    { text: "Bloom at your own pace.",                          author: "Words to remember" },
+    { text: "Be gentle with yourself. You're doing your best.", author: "Words to remember" },
+    { text: "Every day is a chance to begin again.",            author: "Words to remember" },
+    { text: "Kindness is a quiet kind of magic.",               author: "Words to remember" },
+    { text: "Happiness lives in little moments.",               author: "Words to remember" }
+  ];
+
+  /* ====== MOBILE MENU ====== */
+  var menu = document.getElementById("menu");
+  document.getElementById("menuBtn").addEventListener("click", function () {
+    menu.classList.toggle("open");
+  });
+  menu.querySelectorAll("a").forEach(function (a) {
+    a.addEventListener("click", function () { menu.classList.remove("open"); });
+  });
+
+  /* ====== STORIES: read more / show less ====== */
+  document.querySelectorAll(".story button").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var story = btn.closest(".story");
+      story.classList.toggle("open");
+      btn.textContent = story.classList.contains("open") ? "Show less ↑" : "Read more ↓";
+    });
+  });
+
+  /* ====== GALLERY POP-UP ====== */
+  var lightbox = document.getElementById("lightbox");
+  var lbView = document.getElementById("lbView");
+  var lbCaption = document.getElementById("lbCaption");
+
+  document.querySelectorAll(".photo").forEach(function (photo) {
+    photo.addEventListener("click", function () {
+      var bg = window.getComputedStyle(photo).backgroundImage;
+      lbView.style.backgroundImage = bg;
+      var img = photo.querySelector("img");
+      if (img) {
+        lbView.innerHTML = '<img src="' + img.getAttribute("src") + '" alt="' + (img.alt || "") + '">';
+      } else {
+        lbView.textContent = photo.childNodes[0].textContent;
+      }
+      lbCaption.textContent = photo.getAttribute("data-cap");
+      lightbox.classList.add("show");
+    });
+  });
+  function closeBox() { lightbox.classList.remove("show"); }
+  document.getElementById("lbClose").addEventListener("click", closeBox);
+  lightbox.addEventListener("click", function (e) { if (e.target === lightbox) closeBox(); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeBox(); });
+
+  /* ====== QUOTES ====== */
+  var qText = document.getElementById("quoteText");
+  var qAuthor = document.getElementById("quoteAuthor");
+  var qIndex = 0;
+  document.getElementById("newQuote").addEventListener("click", function () {
+    qIndex = (qIndex + 1) % quotes.length;
+    qText.style.opacity = 0;
+    setTimeout(function () {
+      qText.textContent = quotes[qIndex].text;
+      qAuthor.textContent = "— " + quotes[qIndex].author;
+      qText.style.opacity = 1;
+    }, 300);
+  });
+
+  /* ====== CONTACT FORM (opens the email app) ====== */
+  document.getElementById("contactForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var name = document.getElementById("name").value;
+    var message = document.getElementById("message").value;
+    var subject = encodeURIComponent("Hello from " + name);
+    var body = encodeURIComponent(message + "\n\n— " + name);
+    window.location.href = "mailto:" + myEmail + "?subject=" + subject + "&body=" + body;
+  });
+
+  /* ====== FADE-IN ON SCROLL ====== */
+  var items = document.querySelectorAll(".reveal");
+  if ("IntersectionObserver" in window) {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) { entry.target.classList.add("visible"); observer.unobserve(entry.target); }
+      });
+    }, { threshold: 0.12 });
+    items.forEach(function (el) { observer.observe(el); });
+  } else {
+    items.forEach(function (el) { el.classList.add("visible"); });
+  }
+
+  /* ====== FOOTER YEAR ====== */
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
